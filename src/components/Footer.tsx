@@ -29,13 +29,20 @@ const Footer = () => {
   }, []);
 
   const fetchConfig = async () => {
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from("configuracoes")
-      .select('logo_url, whatsapp, telefone, email, instagram, endereco')
-      .maybeSingle();
+      .select("logo_url, whatsapp, telefone, email, instagram, endereco")
+      .order("created_at", { ascending: false })
+      .limit(1);
 
-    if (data) {
-      setConfig(data);
+    if (error) {
+      console.error("Erro ao buscar configurações", error.message);
+      return;
+    }
+
+    const configRow = data?.[0];
+    if (configRow) {
+      setConfig(configRow);
     }
   };
 
@@ -53,9 +60,14 @@ const Footer = () => {
           <div className="md:col-span-2">
             <Link to="/" className="inline-flex items-center gap-3 mb-6">
               {config?.logo_url && (
-                <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-primary/30">
-                  <img src={config.logo_url} alt="Logo" className="w-full h-full object-cover" />
-                </div>
+              <div className="flex items-center h-12 md:h-14">
+                <img
+                  src={config.logo_url}
+                  alt="Logo"
+                  className="h-full object-contain"
+                  style={{ backgroundColor: "transparent" }}
+                />
+              </div>
               )}
               <span className="text-3xl font-heading font-bold">
                 <span className="text-foreground">INOVE</span>

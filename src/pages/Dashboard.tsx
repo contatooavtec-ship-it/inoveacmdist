@@ -183,12 +183,16 @@ const Dashboard = () => {
 
   const fetchData = async () => {
     // Fetch configuracoes
-    const { data: configData } = await supabase
+    const { data: configRows, error: configError } = await supabase
       .from('configuracoes')
       .select('*')
-      .maybeSingle();
+      .order('created_at', { ascending: false })
+      .limit(1);
     
-    if (configData) {
+    if (configError) {
+      console.error("Erro ao buscar configurações", configError.message);
+    } else if (configRows && configRows.length) {
+      const configData = configRows[0];
       setConfiguracoes({
         id: configData.id,
         valor_m2: configData.valor_m2 || 350,
@@ -327,26 +331,29 @@ const Dashboard = () => {
       }
     }
 
+    const payload = {
+      id: configuracoes.id || undefined,
+      valor_m2: configuracoes.valor_m2,
+      valor_minimo: configuracoes.valor_minimo,
+      valor_instalacao: configuracoes.valor_instalacao,
+      valor_letreiro: configuracoes.valor_letreiro,
+      logo_url: logoUrl,
+      whatsapp: configuracoes.whatsapp,
+      email: configuracoes.email,
+      instagram: configuracoes.instagram,
+      endereco: configuracoes.endereco,
+      telefone: configuracoes.telefone,
+    };
+
     const { error } = await supabase
       .from('configuracoes')
-      .upsert({
-        id: configuracoes.id || undefined,
-        valor_m2: configuracoes.valor_m2,
-        valor_minimo: configuracoes.valor_minimo,
-        valor_instalacao: configuracoes.valor_instalacao,
-        valor_letreiro: configuracoes.valor_letreiro,
-        logo_url: logoUrl,
-        whatsapp: configuracoes.whatsapp,
-        email: configuracoes.email,
-        instagram: configuracoes.instagram,
-        endereco: configuracoes.endereco,
-        telefone: configuracoes.telefone,
-      });
+      .upsert(payload, { onConflict: 'id' });
 
     if (error) {
       toast({ title: "Erro ao salvar", description: error.message, variant: "destructive" });
     } else {
       toast({ title: "Salvo!", description: "Configurações atualizadas com sucesso." });
+      setConfiguracoes((prev) => ({ ...prev, ...payload }));
       fetchData();
     }
   };

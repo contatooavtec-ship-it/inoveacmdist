@@ -14,13 +14,20 @@ const Header = () => {
   }, []);
 
   const fetchLogo = async () => {
-    const { data } = await supabase
-      .from('configuracoes')
-      .select('logo_url')
-      .maybeSingle();
-    
-    if (data?.logo_url) {
-      setLogoUrl(data.logo_url);
+    const { data, error } = await supabase
+      .from("configuracoes")
+      .select("logo_url")
+      .order("created_at", { ascending: false })
+      .limit(1);
+
+    if (error) {
+      console.error("Erro ao buscar logo", error.message);
+      return;
+    }
+
+    const logoRow = data?.[0];
+    if (logoRow?.logo_url) {
+      setLogoUrl(logoRow.logo_url);
     }
   };
 
@@ -41,11 +48,12 @@ const Header = () => {
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3">
             {logoUrl && (
-              <div className="w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden border-2 border-primary/30 flex-shrink-0">
-                <img 
-                  src={logoUrl} 
-                  alt="INOVEACM" 
-                  className="w-full h-full object-cover"
+              <div className="flex items-center h-12 md:h-14 lg:h-20 transition-all duration-300">
+                <img
+                  src={logoUrl}
+                  alt="INOVEACM"
+                  className="h-full object-contain"
+                  style={{ backgroundColor: "transparent" }}
                 />
               </div>
             )}
