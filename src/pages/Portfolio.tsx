@@ -123,12 +123,12 @@ const Portfolio = () => {
                 Nenhum item no portfólio ainda.
               </p>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
                 {filteredItems.map((item) => (
                   <div
                     key={item.id}
                     onClick={() => setSelectedItem(item)}
-                    className="group cursor-pointer rounded-2xl overflow-hidden bg-background border border-border hover:border-primary/50 transition-all duration-500 hover:shadow-gold"
+                    className="group cursor-pointer flex flex-col h-full rounded-3xl overflow-hidden bg-background border border-border transition-all duration-500 hover:-translate-y-1 hover:border-primary/50 hover:shadow-xl"
                   >
                     <div className="relative aspect-[4/3] overflow-hidden">
                       {item.midia_url ? (
@@ -158,7 +158,7 @@ const Portfolio = () => {
                         </div>
                       )}
                     </div>
-                    <div className="p-6">
+                    <div className="p-6 flex flex-col flex-1 gap-3">
                       {item.categoria?.nome && (
                         <span className="text-primary text-sm font-medium">{item.categoria.nome}</span>
                       )}

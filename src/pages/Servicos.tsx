@@ -68,45 +68,36 @@ const Servicos = () => {
                 Nenhum serviço cadastrado ainda.
               </p>
             ) : (
-              <div className="space-y-24">
-                {servicos.map((servico, index) => (
-                  <div 
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                {servicos.map((servico) => (
+                  <article
                     key={servico.id}
-                    className={`flex flex-col ${index % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'} gap-12 items-center`}
+                    className="group flex flex-col h-full rounded-3xl border border-border bg-background shadow-sm transition hover:-translate-y-1 hover:shadow-xl"
                   >
-                    {/* Image */}
-                    <div className="flex-1 w-full">
-                      <div className="relative rounded-2xl overflow-hidden aspect-[4/3] shadow-2xl">
-                        {servico.imagem_url ? (
-                          <img 
-                            src={servico.imagem_url} 
-                            alt={servico.titulo}
-                            className="w-full h-full object-cover"
-                          />
-                        ) : (
-                          <div className="w-full h-full bg-secondary flex items-center justify-center">
-                            <Building2 size={64} className="text-muted-foreground" />
-                          </div>
-                        )}
-                        <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
-                        <div className="absolute bottom-6 left-6">
-                          <div className="w-14 h-14 rounded-xl bg-primary/90 flex items-center justify-center">
-                            <Building2 className="text-primary-foreground" size={28} />
-                          </div>
+                    <div className="relative aspect-[4/3] overflow-hidden">
+                      {servico.imagem_url ? (
+                        <img
+                          src={servico.imagem_url}
+                          alt={servico.titulo}
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-secondary flex items-center justify-center">
+                          <Building2 size={48} className="text-muted-foreground" />
                         </div>
-                      </div>
+                      )}
+                      <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
                     </div>
 
-                    {/* Content */}
-                    <div className="flex-1">
-                      <h2 className="text-3xl md:text-4xl font-heading font-bold mb-6">
+                    <div className="p-6 flex flex-col flex-1 gap-3">
+                      <h3 className="text-xl font-heading font-semibold text-foreground">
                         {servico.titulo}
-                      </h2>
-                      <p className="text-lg text-muted-foreground leading-relaxed">
+                      </h3>
+                      <p className="text-sm text-muted-foreground leading-relaxed">
                         {servico.descricao}
                       </p>
                     </div>
-                  </div>
+                  </article>
                 ))}
               </div>
             )}
