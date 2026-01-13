@@ -46,7 +46,7 @@ const Header = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-3">
+          <Link to="/" className="flex items-center gap-3 h-full">
             {logoUrl && (
               <div className="flex items-center h-12 md:h-14 lg:h-20 transition-all duration-300">
                 <img
